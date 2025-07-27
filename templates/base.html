@@ -18,6 +18,8 @@
                 <li><a href="{{ url_for('ranking') }}">Ranking</a></li>
                 <li><a href="{{ url_for('categories_list') }}">Categorías</a></li>
                 <li><a href="{{ url_for('notifications') }}">Notificaciones{% if unread_notifications %} ({{ unread_notifications }}){% endif %}</a></li>
+                <li><a href="{{ url_for('chat') }}">💬 Chat</a></li>
+
                 <li>
                     <form action="{{ url_for('search') }}" method="GET" class="search-form">
                         <input type="text" name="q" placeholder="Buscar..." class="search-input">
