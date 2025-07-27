@@ -1,5 +1,11 @@
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-    const socket = io();
+    const socket = io({
+        transports: ['websocket'],
+        upgrade: false,
+        secure: true
+    });
+
     const chat = document.getElementById('chat');
     const input = document.getElementById('msg');
     const button = document.getElementById('send');
