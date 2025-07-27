@@ -436,11 +436,6 @@ def ranking():
     users = User.query.order_by(User.points.desc()).all()
     return render_template('ranking.html', users=users)
 
-@app.route('/chat')
-@login_required
-def chat():
-    return render_template('chat.html')
-
 @app.route('/follow/<username>')
 @login_required
 def follow_user(username):
