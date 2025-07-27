@@ -1,3 +1,5 @@
+import eventlet
+eventlet.monkey_patch()
 import os
 import uuid
 import smtplib
@@ -569,11 +571,10 @@ def uploaded_file(filename):
 def init_db():
     db.create_all()
     if Category.query.first() is None:
-        default_categories = ['General', 'Videos', 'Imágenes', 'Memes']
+        default_categories = ['General', 'Cabras, gatos y otros bichos', 'Foticos', 'Memes', 'WTF', 'Melafo', 'Darwin', 'Coño un enano', 'Mono con pistola']
         for cat_name in default_categories:
             db.session.add(Category(name=cat_name))
         db.session.commit()
-    create_admin_if_needed()
 
 @app.template_filter('embed_video')
 def embed_video(link: str) -> str:
