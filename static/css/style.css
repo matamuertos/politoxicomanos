@@ -1,0 +1,315 @@
+/* Basic styling for the humor site */
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Navbar */
+/* Navbar */
+.navbar {
+    background-color: #1f1f1f;
+    color: #f5f5f5;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    color: #f5f5f5;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar-links li {
+    margin-left: 15px;
+}
+
+.navbar-links a {
+    color: #f5f5f5;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+.navbar-links a:hover {
+    color: #aaaaaa;
+}
+
+/* Messages */
+.messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background-color: #2e7d32;
+    color: #e0f2f1;
+}
+
+.alert-danger {
+    background-color: #c62828;
+    color: #ffebee;
+}
+
+.alert-info {
+    background-color: #1565c0;
+    color: #e3f2fd;
+}
+
+.alert-warning {
+    background-color: #f9a825;
+    color: #fffde7;
+}
+
+/* Forms */
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+form input[type="file"] {
+    margin-bottom: 10px;
+}
+
+form button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+form button:hover {
+    background-color: #2980b9;
+}
+
+/* Contribution cards */
+.contribution {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.contribution-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.contribution-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.contribution-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.contribution-description {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.contribution-media {
+    margin-bottom: 10px;
+}
+
+.contribution-media img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.contribution-media iframe {
+    width: 100%;
+    height: 360px;
+    border: none;
+    border-radius: 5px;
+}
+
+/* Comments */
+.comments-section {
+    margin-top: 30px;
+}
+
+/* Comment styles on dark background */
+.comment {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.comment-header img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+    object-fit: cover;
+}
+
+.comment-username {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.comment-content {
+    margin-bottom: 5px;
+}
+
+.comment-votes {
+    font-size: 14px;
+    color: #aaa;
+}
+
+.vote-buttons {
+    margin-top: 5px;
+}
+
+.vote-buttons form {
+    display: inline;
+    margin-right: 5px;
+}
+
+.vote-buttons button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #64b5f6;
+}
+
+.vote-buttons button:hover {
+    text-decoration: underline;
+}
+
+/* Admin Dashboard */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.admin-table th, .admin-table td {
+    border: 1px solid #333;
+    padding: 8px;
+    text-align: left;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+.admin-table th {
+    background-color: #2b2b2b;
+    font-weight: bold;
+}
+
+.admin-actions a {
+    margin-right: 10px;
+    color: #64b5f6;
+    text-decoration: none;
+}
+
+.admin-actions a:hover {
+    text-decoration: underline;
+}
+
+/* Notification items */
+.notification-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+/* Form select styling */
+form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+/* Search bar styling */
+.search-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    padding: 6px 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    font-size: 14px;
+}
+
+.search-input::placeholder {
+    color: #888;
+}

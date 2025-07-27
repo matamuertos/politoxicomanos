@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{%- block title -%}Tendencias - politoxicomanos.com{%- endblock -%}
+
+{% block content %}
+<h1>Aportes en Tendencia</h1>
+{% if contributions %}
+    {% for c in contributions %}
+    <div class="contribution">
+        <div class="contribution-header">
+            <img src="{{ url_for('uploaded_file', filename='profile_pics/' + (c.author.profile_pic or 'default.png')) }}" alt="Avatar">
+            <div>
+                <div class="contribution-title"><a href="{{ url_for('view_contribution', contrib_id=c.id) }}">{{ c.title }}</a></div>
+                <small>Por <a href="{{ url_for('profile', username=c.author.username) }}">{{ c.author.username }}</a> • {{ c.created_at.strftime('%d/%m/%Y %H:%M') }} • Votos: {{ c.votes }}</small>
+            </div>
+        </div>
+        {% if c.description %}
+        <p class="contribution-description">{{ c.description }}</p>
+        {% endif %}
+        <div class="contribution-media">
+            {% if c.image %}
+                <a href="{{ url_for('view_contribution', contrib_id=c.id) }}">
+                    <img src="{{ url_for('uploaded_file', filename='contributions/' + c.image) }}" alt="Imagen del aporte">
+                </a>
+            {% elif c.link %}
+                <div class="video-container">
+                    <iframe src="{{ c.link|embed_video }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            {% endif %}
+        </div>
+        <div style="display:flex; align-items:center;">
+            <span style="margin-right:10px;">Votos: {{ c.votes }}</span>
+            {% if current_user and current_user.id != c.author.id and c.approved %}
+            <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=1) }}" method="POST" style="display:inline; margin-right:5px;">
+                <button type="submit">👍</button>
+            </form>
+            <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=-1) }}" method="POST" style="display:inline;">
+                <button type="submit">👎</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>No hay aportes aún.</p>
+{% endif %}
+{% endblock %}

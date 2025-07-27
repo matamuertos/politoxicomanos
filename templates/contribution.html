@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{%- block title -%}{{ contribution.title }} - politoxicomanos.com{%- endblock -%}
+
+{% block content %}
+<div class="contribution">
+    <div class="contribution-header">
+        <img src="{{ url_for('uploaded_file', filename='profile_pics/' + (contribution.author.profile_pic or 'default.png')) }}" alt="Avatar">
+        <div>
+            <div class="contribution-title">{{ contribution.title }}</div>
+            <small>Por <a href="{{ url_for('profile', username=contribution.author.username) }}">{{ contribution.author.username }}</a> • {{ contribution.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+        </div>
+    </div>
+    {% if contribution.description %}
+    <p class="contribution-description">{{ contribution.description }}</p>
+    {% endif %}
+    <div class="contribution-media">
+        {% if contribution.image %}
+            <img src="{{ url_for('uploaded_file', filename='contributions/' + contribution.image) }}" alt="Imagen del aporte">
+        {% elif contribution.link %}
+            <iframe src="{{ contribution.link|embed_video }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        {% endif %}
+    </div>
+    <div style="display:flex; align-items:center; margin-bottom:10px;">
+        <span style="margin-right:10px;">Votos: {{ contribution.votes }}</span>
+        {% if current_user and current_user.id != contribution.author.id and contribution.approved %}
+        <form action="{{ url_for('vote_contribution', contrib_id=contribution.id, value=1) }}" method="POST" style="display:inline; margin-right:5px;">
+            <button type="submit">👍</button>
+        </form>
+        <form action="{{ url_for('vote_contribution', contrib_id=contribution.id, value=-1) }}" method="POST" style="display:inline;">
+            <button type="submit">👎</button>
+        </form>
+        {% endif %}
+    </div>
+    <hr>
+    <div class="comments-section">
+        <h3>Comentarios ({{ comments|length }})</h3>
+        {% if comments %}
+            {% for com in comments %}
+            <div class="comment">
+                <div class="comment-header">
+                    <img src="{{ url_for('uploaded_file', filename='profile_pics/' + (com.author.profile_pic or 'default.png')) }}" alt="Avatar">
+                    <span class="comment-username"><a href="{{ url_for('profile', username=com.author.username) }}">{{ com.author.username }}</a></span>
+                    <small>{{ com.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                </div>
+                <div class="comment-content">{{ com.content }}</div>
+                <div class="comment-votes">Votos: {{ com.votes }}</div>
+                <div class="vote-buttons">
+                    {% if current_user and current_user.id != com.author.id %}
+                    <form action="{{ url_for('vote_comment', comment_id=com.id, value=1) }}" method="POST">
+                        <button type="submit">👍</button>
+                    </form>
+                    <form action="{{ url_for('vote_comment', comment_id=com.id, value=-1) }}" method="POST">
+                        <button type="submit">👎</button>
+                    </form>
+                    {% endif %}
+                    {% if current_user and current_user.is_admin %}
+                    <form action="{{ url_for('delete_comment', comment_id=com.id) }}" method="POST" onsubmit="return confirm('¿Eliminar este comentario?');">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No hay comentarios aún.</p>
+        {% endif %}
+        {% if current_user %}
+        <h4>Agregar comentario</h4>
+        <form method="POST">
+            <textarea name="content" rows="3" required></textarea>
+            <button type="submit">Enviar comentario</button>
+        </form>
+        {% else %}
+        <p>Debes <a href="{{ url_for('login') }}">iniciar sesión</a> para comentar.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

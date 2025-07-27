@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{%- block title -%}Editar Perfil - politoxicomanos.com{%- endblock -%}
+
+{% block content %}
+<h1>Editar Perfil</h1>
+<form method="POST" enctype="multipart/form-data">
+    <label for="bio">Biografía</label>
+    <textarea id="bio" name="bio" rows="3">{{ user.bio }}</textarea>
+
+    <label for="location">Ubicación</label>
+    <input type="text" id="location" name="location" value="{{ user.location }}">
+
+    <label for="website">Sitio web</label>
+    <input type="text" id="website" name="website" value="{{ user.website }}">
+
+    <label for="profile_pic">Foto de perfil (opcional)</label>
+    <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+
+    <button type="submit">Guardar cambios</button>
+</form>
+{% endblock %}

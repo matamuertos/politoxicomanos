@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{%- block title -%}Administrar Aportes - politoxicomanos.com{%- endblock -%}
+
+{% block content %}
+<h1>Panel de administración</h1>
+<p>Aportes pendientes de aprobación:</p>
+{% if pending_contribs %}
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Usuario</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in pending_contribs %}
+        <tr>
+            <td>{{ c.title }}</td>
+            <td><a href="{{ url_for('profile', username=c.author.username) }}">{{ c.author.username }}</a></td>
+            <td>{{ c.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td class="admin-actions">
+                <a href="{{ url_for('view_contribution', contrib_id=c.id) }}" target="_blank">Ver</a>
+                <a href="{{ url_for('approve_contribution', contrib_id=c.id) }}">Aprobar</a>
+                <a href="{{ url_for('reject_contribution', contrib_id=c.id) }}" onclick="return confirm('¿Estás seguro de rechazar este aporte?');">Rechazar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hay aportes pendientes.</p>
+{% endif %}
+{% endblock %}

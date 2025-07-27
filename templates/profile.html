@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Perfil - {{ user.username }}{% endblock %}
+
+{% block content %}
+<h1>Perfil de {{ user.username }}</h1>
+<div class="contribution-header" style="margin-bottom:20px;">
+    <img src="{{ url_for('uploaded_file', filename='profile_pics/' + (user.profile_pic or 'default.png')) }}" alt="Avatar" style="width:80px; height:80px;">
+    <div>
+        <p><strong>{{ user.username }}</strong></p>
+        <p>Risketos: {{ user.points }}</p>
+        {% if user.bio %}<p>{{ user.bio }}</p>{% endif %}
+        {% if user.location %}<p><em>{{ user.location }}</em></p>{% endif %}
+        {% if user.website %}<p><a href="{{ user.website }}" target="_blank">{{ user.website }}</a></p>{% endif %}
+        {% if current_user and current_user.id == user.id %}
+        <p>Email: {{ user.email }}</p>
+        <p><a href="{{ url_for('edit_profile') }}">Editar perfil</a></p>
+        {% elif current_user %}
+        {# follow/unfollow link #}
+        {% set following_count = current_user.following|selectattr('followed_id', 'equalto', user.id)|list|length %}
+        <p><a href="{{ url_for('follow_user', username=user.username) }}">
+            {% if following_count > 0 %}
+                Dejar de seguir
+            {% else %}
+                Seguir
+            {% endif %}
+        </a></p>
+        {% endif %}
+        {% if current_user and current_user.is_admin and current_user.id != user.id %}
+        <p>
+            {% if user.is_muted %}
+                <a href="{{ url_for('mute_user', user_id=user.id) }}">Habilitar comentarios</a>
+            {% else %}
+                <a href="{{ url_for('mute_user', user_id=user.id) }}">Silenciar usuario</a>
+            {% endif %}
+        </p>
+        {% endif %}
+    </div>
+</div>
+<h2>Aportes de {{ user.username }}</h2>
+{% if contributions %}
+    {% for c in contributions %}
+    <div class="contribution">
+        <div class="contribution-title"><a href="{{ url_for('view_contribution', contrib_id=c.id) }}">{{ c.title }}</a></div>
+        <small>{{ c.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>No hay aportes aprobados de este usuario.</p>
+{% endif %}
+{% endblock %}

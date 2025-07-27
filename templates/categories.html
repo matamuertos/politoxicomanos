@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{%- block title -%}Categorías - politoxicomanos.com{%- endblock -%}
+
+{% block content %}
+<h1>Categorías</h1>
+{% if categories %}
+    <ul style="list-style:none; padding:0;">
+    {% for cat in categories %}
+        <li style="margin-bottom:10px;">
+            <a href="{{ url_for('category_view', category_id=cat.id) }}" style="color:#64b5f6; text-decoration:none; font-size:18px;">
+                {{ cat.name }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay categorías disponibles.</p>
+{% endif %}
+{% endblock %}

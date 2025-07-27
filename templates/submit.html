@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{%- block title -%}Enviar Aporte - politoxicomanos.com{%- endblock -%}
+
+{% block content %}
+<h1>Enviar nuevo aporte</h1>
+<form method="POST" enctype="multipart/form-data">
+    <label for="title">Título</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="category_id">Categoría</label>
+    <select id="category_id" name="category_id" required>
+        {% for cat in categories %}
+        <option value="{{ cat.id }}">{{ cat.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="description">Descripción (opcional)</label>
+    <textarea id="description" name="description" rows="3"></textarea>
+
+    <label for="link">Enlace (video de YouTube u otra página) (opcional)</label>
+    <input type="text" id="link" name="link">
+
+    <label for="image">Imagen (opcional)</label>
+    <input type="file" id="image" name="image" accept="image/*">
+
+    <p>Puedes proporcionar un enlace o subir una imagen. Si ambos se proporcionan, se utilizará la imagen.</p>
+    <button type="submit">Enviar</button>
+</form>
+{% endblock %}
