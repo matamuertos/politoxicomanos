@@ -50,5 +50,14 @@
         {% block content %}
         {% endblock %}
     </div>
+    {% if current_user %}
+    {% include 'partials/chat_floating.html' %}
+{% endif %}
+
+<footer style="text-align: center; color: #888; font-size: 0.9em; padding: 2em 1em;">
+    <p>Este sitio web utiliza solo cookies técnicas necesarias para el funcionamiento, como mantener la sesión de usuario. No se utilizan cookies de seguimiento ni de terceros.</p>
+    <p><a href="{{ url_for('privacy') }}" style="color: #888;">Política de privacidad</a></p>
+</footer>
+
 </body>
 </html>

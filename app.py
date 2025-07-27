@@ -4,7 +4,7 @@ import os
 import uuid
 import smtplib
 import ssl
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, flash, abort, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -14,7 +14,7 @@ from sqlalchemy import or_
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key_here'  # sustituye por tu clave secreta
+app.config['SECRET_KEY'] = 'your_secret_key_here'  
 
 # Configuración de la base de datos
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'site.db')
@@ -568,6 +568,18 @@ def vote_contribution(contrib_id, value):
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+    @app.route('/chat')
+@login_required
+def chat():
+    cutoff = datetime.utcnow() - timedelta(hours=24)
+    messages = ChatMessage.query.filter(ChatMessage.timestamp >= cutoff).order_by(ChatMessage.timestamp.asc()).all()
+    return render_template('chat.html', messages=messages)
+
+    @app.route('/privacidad')
+def privacy():
+    return render_template('privacy.html')
+
+
 def init_db():
     db.create_all()
     if Category.query.first() is None:
@@ -608,12 +620,32 @@ from flask_socketio import SocketIO, emit
 
 socketio = SocketIO(app)
 
+from datetime import datetime
+
 @socketio.on('chat_message')
-def handle_chat_message(msg):
-    user = User.query.get(session.get('user_id'))
-    username = user.username if user else "Anon"
-    # Emitimos el mensaje usando la función importada; si no se importa emit, se produce NameError
-    emit('chat_message', f"{username}: {msg}", broadcast=True)
+def handle_chat_message(message):
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    if user:
+        # Eliminar mensajes antiguos
+        cutoff = datetime.utcnow() - timedelta(hours=24)
+        ChatMessage.query.filter(ChatMessage.timestamp < cutoff).delete()
+        db.session.commit()
+
+        # Guardar nuevo mensaje
+        chat_entry = ChatMessage(username=user.username, message=message)
+        db.session.add(chat_entry)
+        db.session.commit()
+
+        now = datetime.now().strftime("%H:%M")
+        emit('chat_message', {
+            'username': user.username,
+            'message': message,
+            'time': now
+        }, broadcast=True)
+
+
+
 
 if __name__ == '__main__':
     from eventlet import monkey_patch; monkey_patch()  # ⚠️ importante para SocketIO en Render
