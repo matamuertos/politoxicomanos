@@ -594,21 +594,6 @@ def embed_video(link: str) -> str:
     except Exception:
         return link
 
-def create_admin_if_needed():
-    admin_email = 'politoxi2000@gmail.com'
-    existing = User.query.filter_by(email=admin_email).first()
-    if not existing:
-        admin = User(
-            username='Mr.Mierda',
-            email=admin_email,
-            is_admin=True,
-            is_confirmed=True,
-            points=0
-        )
-        admin.set_password('Holahola11')
-        db.session.add(admin)
-        db.session.commit()
-        print("✅ Usuario admin Mr.Mierda creado.")
 
 from flask_socketio import SocketIO, emit
 
@@ -622,6 +607,8 @@ def handle_chat_message(msg):
     emit('chat_message', f"{username}: {msg}", broadcast=True)
 
 if __name__ == '__main__':
+    from eventlet import monkey_patch; monkey_patch()  # ⚠️ importante para SocketIO en Render
     with app.app_context():
         init_db()
-    socketio.run(app, debug=True)
+    socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
