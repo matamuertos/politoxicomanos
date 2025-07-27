@@ -16,9 +16,7 @@
                 {% if current_user %}
                 <li><a href="{{ url_for('submit') }}">Enviar Aporte</a></li>
                 <li><a href="{{ url_for('ranking') }}">Ranking</a></li>
-                {# <a href="{{ url_for('trending') }}">Tendencias</a> #}
                 <li><a href="{{ url_for('categories_list') }}">Categorías</a></li>
-                <li><a href="{{ url_for('feed') }}">Feed</a></li>
                 <li><a href="{{ url_for('notifications') }}">Notificaciones{% if unread_notifications %} ({{ unread_notifications }}){% endif %}</a></li>
                 <li>
                     <form action="{{ url_for('search') }}" method="GET" class="search-form">
@@ -31,7 +29,6 @@
                 {% endif %}
                 <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
                 {% else %}
-                <li><a href="{{ url_for('trending') }}">Tendencias</a></li>
                 <li><a href="{{ url_for('categories_list') }}">Categorías</a></li>
                 <li><a href="{{ url_for('ranking') }}">Ranking</a></li>
                 <li><a href="{{ url_for('login') }}">Iniciar Sesión</a></li>
