@@ -579,13 +579,6 @@ def chat():
 def privacy():
     return render_template('privacy.html')
 
-
-
-    @app.route('/privacidad')
-def privacy():
-    return render_template('privacy.html')
-
-
 def init_db():
     db.create_all()
     if Category.query.first() is None:
