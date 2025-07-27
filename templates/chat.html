@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat en vivo</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        body { background: #111; color: #eee; font-family: sans-serif; padding: 1em; }
+        #chat { max-height: 300px; overflow-y: auto; border: 1px solid #444; padding: 1em; margin-bottom: 1em; }
+        #msg { width: 80%; padding: 0.5em; }
+        #send { padding: 0.5em; }
+    </style>
+</head>
+<body>
+    <h1>Chat en vivo</h1>
+    <div id="chat"></div>
+    <input id="msg" placeholder="Escribe un mensaje...">
+    <button id="send">Enviar</button>
+
+    <script>
+        const socket = io();
+        const chat = document.getElementById('chat');
+        const input = document.getElementById('msg');
+        const button = document.getElementById('send');
+
+        button.onclick = () => {
+            const message = input.value.trim();
+            if (message) {
+                socket.emit('chat_message', message);
+                input.value = '';
+            }
+        };
+
+        socket.on('chat_message', (msg) => {
+            const line = document.createElement('div');
+            line.textContent = msg;
+            chat.appendChild(line);
+            chat.scrollTop = chat.scrollHeight;
+        });
+    </script>
+</body>
+</html>
