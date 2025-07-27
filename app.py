@@ -690,12 +690,14 @@ def uploaded_file(filename):
 
 def init_db():
     db.create_all()
-    # Initialize default categories if none exist
+    # categorías por defecto
     if Category.query.first() is None:
         default_categories = ['General', 'Videos', 'Imágenes', 'Memes']
         for cat_name in default_categories:
             db.session.add(Category(name=cat_name))
         db.session.commit()
+    create_admin_if_needed()  # 👉 aquí se llama a la función
+
 
 
 # Jinja filter to embed video links (currently supports YouTube)
@@ -734,6 +736,22 @@ def embed_video(link: str) -> str:
     except Exception:
         return link
 
+def create_admin_if_needed():
+    from werkzeug.security import generate_password_hash
+    admin_email = 'politoxi2000@gmail.com'
+    existing = User.query.filter_by(email=admin_email).first()
+    if not existing:
+        admin = User(
+            username='Mr.Mierda',
+            email=admin_email,
+            is_admin=True,
+            is_confirmed=True,
+            points=0
+        )
+        admin.set_password('Holahola11')  # cámbiala si quieres algo más seguro
+        db.session.add(admin)
+        db.session.commit()
+        print("✅ Usuario admin Mr.Mierda creado.")
 
 if __name__ == '__main__':
     # Initialize database if it does not exist
