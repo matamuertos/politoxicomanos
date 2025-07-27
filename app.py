@@ -249,10 +249,17 @@ def login():
     if 'user_id' in session:
         return redirect(url_for('home'))
     if request.method == 'POST':
-        # Usamos cadena vacía por defecto para evitar AttributeError cuando username_or_email sea None
-        username_or_email = request.form.get('username_or_email', '').strip().lower()
+        username_or_email = request.form.get('username_or_email', '').strip()
         password = request.form.get('password')
-        user = User.query.filter((User.username == username_or_email) | (User.email == username_or_email)).first()
+
+        # Busca el usuario por email o username sin diferenciar mayúsculas
+        user = User.query.filter(
+            or_(
+                User.email.ilike(username_or_email),
+                User.username.ilike(username_or_email)
+            )
+        ).first()
+
         if user and user.check_password(password):
             if not user.is_confirmed:
                 flash('Debes confirmar tu cuenta por correo electrónico antes de iniciar sesión.', 'warning')
@@ -263,6 +270,7 @@ def login():
         else:
             flash('Credenciales inválidas.', 'danger')
     return render_template('login.html')
+
 
 @app.route('/logout')
 @login_required
