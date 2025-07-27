@@ -568,7 +568,6 @@ def vote_contribution(contrib_id, value):
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-
 @app.route('/chat')
 @login_required
 def chat():
@@ -576,10 +575,10 @@ def chat():
     messages = ChatMessage.query.filter(ChatMessage.timestamp >= cutoff).order_by(ChatMessage.timestamp.asc()).all()
     return render_template('chat.html', messages=messages)
 
-
 @app.route('/privacidad')
 def privacy():
     return render_template('privacy.html')
+
 
 
     @app.route('/privacidad')
