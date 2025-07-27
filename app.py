@@ -639,8 +639,10 @@ def confirm_email(token):
     user.is_confirmed = True
     user.confirmation_token = None
     db.session.commit()
+    print("Nuevo usuario registrado:", user.email, "Token:", token)
     flash('¡Cuenta confirmada! Ahora puedes iniciar sesión.', 'success')
     return redirect(url_for('login'))
+
 
 
 # Vote on contributions (upvote/downvote)
