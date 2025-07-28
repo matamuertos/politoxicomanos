@@ -576,11 +576,10 @@ def privacy():
 
 @app.route('/crear_tablas')
 def crear_tablas():
-    from flask import abort
-    if not session.get('user_id') == 1:  # Solo el usuario con ID 1 (admin) puede usarla
-        abort(403)
+    db.create_all()
     init_db()
-    return "Tablas creadas correctamente", 200
+    return "Tablas creadas."
+
 
 @app.template_filter('embed_video')
 def embed_video(link: str) -> str:
@@ -658,13 +657,12 @@ def init_db():
         db.session.commit()
 # BLOQUE PRINCIPAL
 if __name__ == '__main__':
-    from eventlet import monkey_patch
-    monkey_patch()
-
+    from eventlet import monkey_patch; monkey_patch()  # necesario en Render
     with app.app_context():
+        db.create_all()
         init_db()
-
     socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
 
 
 
