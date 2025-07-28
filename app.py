@@ -33,7 +33,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 db = SQLAlchemy(app)
 with app.app_context():
     db.create_all()
-    from models import Category  # Asegúrate de importar si es necesario
     if Category.query.first() is None:
         default_categories = [
             'General', 'Cabras, gatos y otros bichos', 'Foticos',
