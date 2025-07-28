@@ -63,7 +63,11 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    contributions = db.relationship('Contribution', backref='category', lazy=True)
+    
 class Contribution(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -635,12 +639,6 @@ def handle_chat_message(message):
             'time': now
         }, broadcast=True)
 
-
-
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
-    contributions = db.relationship('Contribution', backref='category', lazy=True)
 
 
 def init_db():
