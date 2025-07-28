@@ -8,10 +8,12 @@
         #chat { height: 300px; overflow-y: auto; border: 1px solid #555; padding: 10px; margin-bottom: 10px; }
         #msg { width: 80%; }
         #send { width: 18%; }
+        #userlist { color: #aaa; font-size: 0.9em; margin-bottom: 10px; }
     </style>
 </head>
 <body>
     <h1>Chat</h1>
+    <div id="userlist">Conectados: </div>
     <div id="chat"></div>
     <input type="text" id="msg" placeholder="Escribe un mensaje...">
     <button id="send">Enviar</button>
@@ -27,6 +29,7 @@
         const chat = document.getElementById('chat');
         const input = document.getElementById('msg');
         const button = document.getElementById('send');
+        const userList = document.getElementById('userlist');
 
         button.onclick = () => {
             const message = input.value.trim();
@@ -49,41 +52,10 @@
             chat.appendChild(line);
             chat.scrollTop = chat.scrollHeight;
         });
+
+        socket.on('user_list', (users) => {
+            userList.innerHTML = `<strong>Conectados (${users.length}):</strong> ` + users.join(', ');
+        });
     </script>
 </body>
 </html>
-
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<script>
-    const socket = io({
-        transports: ['websocket'],
-        upgrade: false,
-        secure: true
-    });
-
-    const chat = document.getElementById('chat');
-    const input = document.getElementById('msg');
-    const button = document.getElementById('send');
-
-    button.onclick = () => {
-        const message = input.value.trim();
-        if (message) {
-            socket.emit('chat_message', message);
-            input.value = '';
-        }
-    };
-
-    input.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            button.click();
-        }
-    });
-
-    socket.on('chat_message', (data) => {
-        const line = document.createElement('div');
-        line.innerHTML = `<span style="color:#888;">[${data.time}]</span> <strong>${data.username}:</strong> ${data.message}`;
-        chat.appendChild(line);
-        chat.scrollTop = chat.scrollHeight;
-    });
-</script>
