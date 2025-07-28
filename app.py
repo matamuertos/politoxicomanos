@@ -43,24 +43,7 @@ with app.app_context():
         db.session.commit()
 
 
-# Modelos X
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
-    contributions = db.relationship('Contribution', backref='category', lazy=True)
-
-
-def init_db():
-    db.create_all()
-    if Category.query.first() is None:
-        default_categories = [
-            'General', 'Cabras, gatos y otros bichos', 'Foticos',
-            'Memes', 'WTF', 'Melafo', 'Darwin', 'Coño un enano', 'Mono con pistola'
-        ]
-        for cat_name in default_categories:
-            db.session.add(Category(name=cat_name))
-        db.session.commit()
-
+# Modelos
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -668,7 +651,22 @@ def handle_chat_message(message):
 
 
 
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    contributions = db.relationship('Contribution', backref='category', lazy=True)
 
+
+def init_db():
+    db.create_all()
+    if Category.query.first() is None:
+        default_categories = [
+            'General', 'Cabras, gatos y otros bichos', 'Foticos',
+            'Memes', 'WTF', 'Melafo', 'Darwin', 'Coño un enano', 'Mono con pistola'
+        ]
+        for cat_name in default_categories:
+            db.session.add(Category(name=cat_name))
+        db.session.commit()
 # BLOQUE PRINCIPAL
 if __name__ == '__main__':
     from eventlet import monkey_patch
