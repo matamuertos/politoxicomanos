@@ -649,8 +649,10 @@ def handle_chat_message(message):
 
 if __name__ == '__main__':
     from eventlet import monkey_patch; monkey_patch()
-    # with app.app_context():
-    #     init_db()
+    with app.app_context():
+        init_db()  # ⚠️ Esto creará la tabla ChatMessage
     socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
+
 
 
