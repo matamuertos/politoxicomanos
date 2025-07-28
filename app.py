@@ -114,6 +114,7 @@ class ContributionVote(db.Model):
     value = db.Column(db.Integer, nullable=False)  # 1 o -1
 
 
+# MODELO Category
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
@@ -140,6 +141,19 @@ class ChatMessage(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 # Funciones auxiliares
+
+# FUNCIÓN para crear tablas y categorías por defecto
+def init_db():
+    db.create_all()
+    if Category.query.first() is None:
+        default_categories = [
+            'General', 'Cabras, gatos y otros bichos', 'Foticos', 'Memes', 'WTF',
+            'Melafo', 'Darwin', 'Coño un enano', 'Mono con pistola'
+        ]
+        for cat_name in default_categories:
+            db.session.add(Category(name=cat_name))
+        db.session.commit()
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -599,15 +613,6 @@ def crear_tablas():
     init_db()
     return "Tablas creadas correctamente", 200
 
-
-def init_db():
-    db.create_all()
-    if Category.query.first() is None:
-        default_categories = ['General', 'Cabras, gatos y otros bichos', 'Foticos', 'Memes', 'WTF', 'Melafo', 'Darwin', 'Coño un enano', 'Mono con pistola']
-        for cat_name in default_categories:
-            db.session.add(Category(name=cat_name))
-        db.session.commit()
-
 @app.template_filter('embed_video')
 def embed_video(link: str) -> str:
     if not link:
@@ -667,11 +672,14 @@ def handle_chat_message(message):
 
 
 
+# BLOQUE PRINCIPAL
 if __name__ == '__main__':
-    from eventlet import monkey_patch; monkey_patch()
+    from eventlet import monkey_patch
+    monkey_patch()
+
     with app.app_context():
-        db.create_all()
         init_db()
+
     socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
 
 
