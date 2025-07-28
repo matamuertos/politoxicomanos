@@ -9,3 +9,5 @@ instance/
 *.sqlite3
 *.db
 venv/
+.env
+

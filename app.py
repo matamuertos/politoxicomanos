@@ -10,6 +10,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
+from dotenv import load_dotenv
+load_dotenv()
+
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -17,7 +20,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'  
 
 # Configuración de la base de datos
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'site.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Configuración de subidas
@@ -67,7 +70,7 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     contributions = db.relationship('Contribution', backref='category', lazy=True)
-    
+
 class Contribution(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -613,7 +616,10 @@ def embed_video(link: str) -> str:
 
 from flask_socketio import SocketIO, emit
 
+
 socketio = SocketIO(app)
+connected_users = {}
+
 
 from datetime import datetime
 
@@ -638,6 +644,25 @@ def handle_chat_message(message):
             'message': message,
             'time': now
         }, broadcast=True)
+
+@socketio.on('connect')
+def handle_connect():
+    user_id = session.get('user_id')
+    user = User.query.get(user_id) if user_id else None
+    if user:
+        connected_users[request.sid] = user.username
+        broadcast_user_list()
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    if request.sid in connected_users:
+        del connected_users[request.sid]
+        broadcast_user_list()
+
+def broadcast_user_list():
+    socketio.emit('user_list', list(connected_users.values()))
+
+    
 
 
 
