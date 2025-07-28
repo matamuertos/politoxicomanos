@@ -574,12 +574,6 @@ def chat():
 def privacy():
     return render_template('privacy.html')
 
-@app.route('/crear_tablas')
-def crear_tablas():
-    db.create_all()
-    init_db()
-    return "Tablas creadas."
-
 
 @app.template_filter('embed_video')
 def embed_video(link: str) -> str:
