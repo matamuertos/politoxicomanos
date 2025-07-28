@@ -580,6 +580,15 @@ def chat():
 def privacy():
     return render_template('privacy.html')
 
+@app.route('/crear_tablas')
+def crear_tablas():
+    from flask import abort
+    if not session.get('user_id') == 1:  # Solo el usuario con ID 1 (admin) puede usarla
+        abort(403)
+    init_db()
+    return "Tablas creadas correctamente", 200
+
+
 def init_db():
     db.create_all()
     if Category.query.first() is None:
