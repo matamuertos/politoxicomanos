@@ -31,6 +31,18 @@ os.makedirs(CONTRIB_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
+with app.app_context():
+    db.create_all()
+    from models import Category  # Asegúrate de importar si es necesario
+    if Category.query.first() is None:
+        default_categories = [
+            'General', 'Cabras, gatos y otros bichos', 'Foticos',
+            'Memes', 'WTF', 'Melafo', 'Darwin', 'Coño un enano', 'Mono con pistola'
+        ]
+        for cat_name in default_categories:
+            db.session.add(Category(name=cat_name))
+        db.session.commit()
+
 
 # Modelos
 class User(db.Model):
@@ -659,8 +671,10 @@ def handle_chat_message(message):
 if __name__ == '__main__':
     from eventlet import monkey_patch; monkey_patch()
     with app.app_context():
-        init_db()  # ⚠️ Esto creará la tabla ChatMessage
+        db.create_all()
+        init_db()
     socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
 
 
 
