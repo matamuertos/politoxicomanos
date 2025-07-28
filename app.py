@@ -113,14 +113,6 @@ class ContributionVote(db.Model):
     contribution_id = db.Column(db.Integer, db.ForeignKey('contribution.id'), nullable=False)
     value = db.Column(db.Integer, nullable=False)  # 1 o -1
 
-
-# MODELO Category
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
-    contributions = db.relationship('Contribution', backref='category', lazy=True)
-
-
 class Follower(db.Model):
     follower_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     followed_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
@@ -142,7 +134,11 @@ class ChatMessage(db.Model):
 
 # Funciones auxiliares
 
-# FUNCIÓN para crear tablas y categorías por defecto
+# MODELO Category
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    contributions = db.relationship('Contribution', backref='category', lazy=True)
 def init_db():
     db.create_all()
     if Category.query.first() is None:
