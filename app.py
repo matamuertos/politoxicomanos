@@ -121,6 +121,10 @@ class ChatMessage(db.Model):
     message = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+with app.app_context():
+    db.create_all()
+    
+
 # Funciones auxiliares
 
 def allowed_file(filename):
