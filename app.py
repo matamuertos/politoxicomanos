@@ -302,6 +302,7 @@ def profile(username):
 @login_required
 def submit():
     categories = Category.query.order_by(Category.name.asc()).all()
+    print("CATEGORÍAS:", categories)  # ← Esta línea imprime en consola si las categorías llegan bien
     if request.method == 'POST':
         title = request.form.get('title', '').strip()
         description = request.form.get('description', '').strip()
@@ -682,7 +683,7 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         init_db()
-    socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5050)))
 
 
 
