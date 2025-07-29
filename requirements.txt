@@ -20,4 +20,4 @@ Werkzeug==2.3.7
 wsproto==1.2.0
 python-dotenv
 psycopg2-binary
-gevent
+gevent>=1.4
