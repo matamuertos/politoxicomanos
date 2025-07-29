@@ -5,15 +5,14 @@
 <h1> </h1>
 {% if contributions %}
     {% for c in contributions %}
-    <div class="bg-zinc-900 rounded-2xl shadow-lg p-5 mb-8 border border-zinc-700">
+    <div class="bg-zinc-900 rounded-2xl shadow-lg p-5 mb-8 border border-zinc-700 max-w-3xl mx-auto">
         <div class="flex items-center gap-4 mb-3">
             <img src="{{ url_for('uploaded_file', filename='profile_pics/' + (c.author.profile_pic or 'default.png')) }}"
                  alt="Avatar" class="w-10 h-10 rounded-full border border-zinc-700">
             <div>
                 <h2 class="contribution-title">
-                <a href="{{ url_for('view_contribution', contrib_id=c.id) }}">{{ c.title }}</a>
+                    <a href="{{ url_for('view_contribution', contrib_id=c.id) }}">{{ c.title }}</a>
                 </h2>
-
                 <small class="text-gray-400">Por
                     <a href="{{ url_for('profile', username=c.author.username) }}" class="underline hover:text-blue-300">
                         {{ c.author.username }}
@@ -22,53 +21,49 @@
             </div>
         </div>
 
-    {% if c.description %}
-    <p class="text-gray-300 mb-3">{{ c.description }}</p>
-    {% endif %}
-
-    <div class="mb-3">
-        {% if c.image %}
-            <div class="flex justify-center">
-                <a href="{{ url_for('view_contribution', contrib_id=c.id) }}">
-                    <img src="{{ url_for('uploaded_file', filename='contributions/' + c.image) }}"
-                         alt="Imagen del aporte"
-                        class="rounded-xl border border-zinc-700 object-cover"
-                         style="width: 100%; height: 400px;">
-                </a>
-            </div>
-
-        {% elif c.link %}
-            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; border: 1px solid #3f3f46;">
-                <iframe src="{{ c.link|embed_video }}"
-                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 12px;"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-            </div>
+        {% if c.description %}
+        <p class="text-gray-300 mb-3">{{ c.description }}</p>
         {% endif %}
+
+        <div class="mb-3">
+            {% if c.image %}
+                <div class="flex justify-center">
+                    <a href="{{ url_for('view_contribution', contrib_id=c.id) }}">
+                        <img src="{{ url_for('uploaded_file', filename='contributions/' + c.image) }}"
+                             alt="Imagen del aporte"
+                             class="rounded-xl object-cover w-full max-w-3xl h-80 border border-zinc-700">
+                    </a>
+                </div>
+            {% elif c.link %}
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; border: 1px solid #3f3f46;">
+                    <iframe src="{{ c.link|embed_video }}"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 12px;"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="flex items-center gap-2 text-gray-300 text-sm">
+            <span>Votos: {{ c.votes }}</span>
+
+            {% if current_user and current_user.id != c.author.id and c.approved %}
+                <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=1) }}" method="POST" style="display:inline;">
+                   <button type="submit" class="hover:text-green-400">👍</button>
+                </form>
+                <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=-1) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="hover:text-red-400">👎</button>
+                </form>
+            {% endif %}
+
+            {% if current_user and current_user.is_admin %}
+                <form action="{{ url_for('delete_contribution', contrib_id=c.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este aporte?');">
+                    <button type="submit" class="text-red-500 hover:text-red-400 ml-4 text-sm">🗑️ Eliminar</button>
+                </form>
+            {% endif %}
+        </div>
     </div>
-
-    <div class="flex items-center gap-2 text-gray-300 text-sm">
-        <span>Votos: {{ c.votes }}</span>
-
-        {% if current_user and current_user.id != c.author.id and c.approved %}
-            <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=1) }}" method="POST" style="display:inline;">
-               <button type="submit" class="hover:text-green-400">👍</button>
-            </form>
-            <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=-1) }}" method="POST" style="display:inline;">
-                <button type="submit" class="hover:text-red-400">👎</button>
-            </form>
-        {% endif %}
-
-        {% if current_user and current_user.is_admin %}
-            <form action="{{ url_for('delete_contribution', contrib_id=c.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este aporte?');">
-                <button type="submit" class="text-red-500 hover:text-red-400 ml-4 text-sm">🗑️ Eliminar</button>
-            </form>
-        {% endif %}
-    </div>
-
-</div>
-{% endfor %}
-
+    {% endfor %}
 {% else %}
     <p>No hay aportes aún.</p>
 {% endif %}
