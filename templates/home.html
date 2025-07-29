@@ -30,10 +30,11 @@
                 <div class="flex justify-center">
                     <a href="{{ url_for('view_contribution', contrib_id=c.id) }}">
                         <img src="{{ url_for('uploaded_file', filename='contributions/' + c.image) }}"
-                             alt="Imagen del aporte"
-                             class="rounded-xl object-cover w-full max-w-3xl h-80 border border-zinc-700">
-                    </a>
+                        alt="Imagen del aporte"
+                        class="rounded-xl object-cover w-full max-w-3xl h-80 border border-zinc-700">
+                  </a>
                 </div>
+
             {% elif c.link %}
                 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; border: 1px solid #3f3f46;">
                     <iframe src="{{ c.link|embed_video }}"

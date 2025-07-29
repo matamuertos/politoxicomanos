@@ -2,72 +2,88 @@
 {%- block title -%}{{ contribution.title }} - politoxicomanos.com{%- endblock -%}
 
 {% block content %}
-<div class="contribution">
-    <div class="contribution-header">
-        <img src="{{ url_for('uploaded_file', filename='profile_pics/' + (contribution.author.profile_pic or 'default.png')) }}" alt="Avatar">
+<div class="bg-zinc-900 rounded-2xl shadow-lg p-6 mb-8 border border-zinc-700 max-w-3xl mx-auto">
+    <div class="flex items-center gap-4 mb-4">
+        <img src="{{ url_for('uploaded_file', filename='profile_pics/' + (contribution.author.profile_pic or 'default.png')) }}"
+             alt="Avatar" class="w-12 h-12 rounded-full border border-zinc-700">
         <div>
-            <div class="contribution-title">{{ contribution.title }}</div>
-            <small>Por <a href="{{ url_for('profile', username=contribution.author.username) }}">{{ contribution.author.username }}</a> • {{ contribution.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+            <h1 class="text-2xl font-bold text-white mb-1">{{ contribution.title }}</h1>
+            <small class="text-gray-400">
+                Por <a href="{{ url_for('profile', username=contribution.author.username) }}" class="underline hover:text-blue-300 text-white visited:text-white">
+                    {{ contribution.author.username }}
+                </a> • {{ contribution.created_at.strftime('%d/%m/%Y %H:%M') }}
+            </small>
         </div>
     </div>
-    {% if contribution.description %}
-    <p class="contribution-description">{{ contribution.description }}</p>
-    {% endif %}
-    <div class="contribution-media">
-        {% if contribution.image %}
-            <img src="{{ url_for('uploaded_file', filename='contributions/' + contribution.image) }}" alt="Imagen del aporte">
-        {% elif contribution.link %}
-            <iframe src="{{ contribution.link|embed_video }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        {% endif %}
-    </div>
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; border: 1px solid #3f3f46;">
-    <iframe src="{{ c.link|embed_video }}"
-        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 12px;"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-    </div>
 
-    <hr>
+    {% if contribution.description %}
+    <p class="text-gray-300 mb-4">{{ contribution.description }}</p>
+    {% endif %}
+
+    {% if contribution.image %}
+    <div class="mb-4 text-center">
+        <img src="{{ url_for('uploaded_file', filename='contributions/' + contribution.image) }}"
+             alt="Imagen del aporte" class="rounded-xl border border-zinc-700 inline-block max-w-full h-auto">
+    </div>
+    {% elif contribution.link %}
+    <div class="mb-4" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; border: 1px solid #3f3f46;">
+        <iframe src="{{ contribution.link|embed_video }}"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 12px;"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
+    {% endif %}
+
+    <hr class="border-zinc-700 my-4">
+
     <div class="comments-section">
-        <h3>Comentarios ({{ comments|length }})</h3>
+        <h3 class="text-xl text-white mb-3">Comentarios ({{ comments|length }})</h3>
         {% if comments %}
             {% for com in comments %}
-            <div class="comment">
-                <div class="comment-header">
-                    <img src="{{ url_for('uploaded_file', filename='profile_pics/' + (com.author.profile_pic or 'default.png')) }}" alt="Avatar">
-                    <span class="comment-username"><a href="{{ url_for('profile', username=com.author.username) }}">{{ com.author.username }}</a></span>
-                    <small>{{ com.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+            <div class="bg-zinc-800 rounded-lg p-4 mb-4 border border-zinc-700">
+                <div class="flex items-center gap-3 mb-2">
+                    <img src="{{ url_for('uploaded_file', filename='profile_pics/' + (com.author.profile_pic or 'default.png')) }}"
+                         alt="Avatar" class="w-8 h-8 rounded-full border border-zinc-600">
+                    <div>
+                        <span class="text-white font-semibold">
+                            <a href="{{ url_for('profile', username=com.author.username) }}" class="text-white hover:underline visited:text-white">
+                                {{ com.author.username }}
+                            </a>
+                        </span>
+                        <small class="block text-gray-400">{{ com.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                    </div>
                 </div>
-                <div class="comment-content">{{ com.content }}</div>
-                <div class="comment-votes">Votos: {{ com.votes }}</div>
-                <div class="vote-buttons">
+                <div class="text-gray-200 mb-2">{{ com.content }}</div>
+                <div class="text-sm text-gray-400 flex gap-2 items-center">
+                    <span>Votos: {{ com.votes }}</span>
                     {% if current_user and current_user.id != com.author.id %}
                     <form action="{{ url_for('vote_comment', comment_id=com.id, value=1) }}" method="POST">
-                        <button type="submit">👍</button>
+                        <button type="submit" class="hover:text-green-400">👍</button>
                     </form>
                     <form action="{{ url_for('vote_comment', comment_id=com.id, value=-1) }}" method="POST">
-                        <button type="submit">👎</button>
+                        <button type="submit" class="hover:text-red-400">👎</button>
                     </form>
                     {% endif %}
                     {% if current_user and current_user.is_admin %}
                     <form action="{{ url_for('delete_comment', comment_id=com.id) }}" method="POST" onsubmit="return confirm('¿Eliminar este comentario?');">
-                        <button type="submit">Eliminar</button>
+                        <button type="submit" class="text-red-400 hover:text-red-600">Eliminar</button>
                     </form>
                     {% endif %}
                 </div>
             </div>
             {% endfor %}
         {% else %}
-            <p>No hay comentarios aún.</p>
+            <p class="text-gray-400">No hay comentarios aún.</p>
         {% endif %}
+
         {% if current_user %}
-        <h4>Agregar comentario</h4>
+        <h4 class="text-white mt-6 mb-2">Agregar comentario</h4>
         <form method="POST">
-            <textarea name="content" rows="3" required></textarea>
-            <button type="submit">Enviar comentario</button>
+            <textarea name="content" rows="3" required class="w-full p-2 rounded bg-zinc-800 text-white border border-zinc-600 mb-2"></textarea>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Enviar comentario</button>
         </form>
         {% else %}
-        <p>Debes <a href="{{ url_for('login') }}">iniciar sesión</a> para comentar.</p>
+        <p class="text-gray-400 mt-4">Debes <a href="{{ url_for('login') }}" class="text-blue-400 hover:underline">iniciar sesión</a> para comentar.</p>
         {% endif %}
     </div>
 </div>
