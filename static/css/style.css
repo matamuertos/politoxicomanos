@@ -128,55 +128,40 @@ form button:hover {
     background-color: #2980b9;
 }
 
-/* Contribution cards */
+/* Mejora visual de cada aporte */
 .contribution {
     background-color: #1e1e1e;
     border: 1px solid #333;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    padding: 25px;
+    margin: 30px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    max-width: 700px;   /* Ancho mayor */
 }
 
-.contribution-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.contribution-header img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-    object-fit: cover;
-}
-
-.contribution-title {
-    font-size: 20px;
+/* Título más grande y claro */
+.contribution-title a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 24px;  /* Aumentado */
     font-weight: bold;
-    margin-bottom: 5px;
+    display: block;
 }
 
+.contribution-title a:hover {
+    color: #60a5fa;
+}
+
+.contribution-title a:visited {
+    color: #3b82f6;
+}
+
+/* Descripción más clara */
 .contribution-description {
-    margin-bottom: 10px;
-    color: #555;
-}
-
-.contribution-media {
-    margin-bottom: 10px;
-}
-
-.contribution-media img {
-    max-width: 100%;
-    border-radius: 5px;
-}
-
-.contribution-media iframe {
-    width: 100%;
-    height: 360px;
-    border: none;
-    border-radius: 5px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #ccc;
+    margin: 10px 0 20px;
 }
 
 /* Comments */
@@ -409,4 +394,27 @@ form select {
     font-size: 14px;
     width: 160px;
     border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .navbar-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .navbar-links li {
+        margin-left: 0;
+    }
+
+    .search-form {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .search-input {
+        width: 100%;
+        max-width: 300px;
+    }
 }
