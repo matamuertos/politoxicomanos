@@ -618,12 +618,8 @@ def embed_video(link: str) -> str:
 
 from flask_socketio import SocketIO, emit
 
-
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='gevent')
 connected_users = {}
-
-
-from datetime import datetime
 
 @socketio.on('chat_message')
 def handle_chat_message(message):
@@ -664,10 +660,6 @@ def handle_disconnect():
 def broadcast_user_list():
     socketio.emit('user_list', list(connected_users.values()))
 
-    
-
-
-
 def init_db():
     db.create_all()
     if Category.query.first() is None:
@@ -678,16 +670,3 @@ def init_db():
         for cat_name in default_categories:
             db.session.add(Category(name=cat_name))
         db.session.commit()
-# BLOQUE PRINCIPAL
-if __name__ == '__main__':
-    from eventlet import monkey_patch; monkey_patch()  # necesario en Render
-    with app.app_context():
-        db.create_all()
-        init_db()
-    socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5050)))
-
-
-
-
-
-
