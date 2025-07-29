@@ -44,22 +44,23 @@
 
     <div class="flex items-center gap-2 text-gray-300 text-sm">
         <span>Votos: {{ c.votes }}</span>
+
         {% if current_user and current_user.id != c.author.id and c.approved %}
-        <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=1) }}" method="POST">
-            <button type="submit" class="hover:text-green-400">👍</button>
-        </form>
-        <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=-1) }}" method="POST">
-            <button type="submit" class="hover:text-red-400">👎</button>
-        </form>
+            <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=1) }}" method="POST" style="display:inline;">
+               <button type="submit" class="hover:text-green-400">👍</button>
+            </form>
+            <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=-1) }}" method="POST" style="display:inline;">
+                <button type="submit" class="hover:text-red-400">👎</button>
+            </form>
         {% endif %}
 
-        {% if current_user.is_authenticated and current_user.is_admin %}
-        <form action="{{ url_for('delete_contribution', contrib_id=c.id) }}" method="POST"
-              onsubmit="return confirm('¿Seguro que quieres eliminar este aporte?');">
-            <button type="submit" class="text-red-400 hover:text-red-600 ml-4">🗑️ Eliminar</button>
-        </form>
+        {% if current_user and current_user.is_admin %}
+            <form action="{{ url_for('delete_contribution', contrib_id=c.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este aporte?');">
+                <button type="submit" class="text-red-500 hover:text-red-400 ml-4 text-sm">🗑️ Eliminar</button>
+            </form>
         {% endif %}
     </div>
+
 </div>
 {% endfor %}
 

@@ -408,6 +408,7 @@ def delete_contribution(contrib_id):
     flash('Aporte eliminado correctamente.', 'success')
     return redirect(url_for('home'))
 
+
 @app.route('/admin/mute/<int:user_id>')
 @admin_required
 def mute_user(user_id):
