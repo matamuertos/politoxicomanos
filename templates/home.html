@@ -39,7 +39,6 @@
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
             </div>
-
         {% endif %}
     </div>
 
@@ -51,6 +50,13 @@
         </form>
         <form action="{{ url_for('vote_contribution', contrib_id=c.id, value=-1) }}" method="POST">
             <button type="submit" class="hover:text-red-400">👎</button>
+        </form>
+        {% endif %}
+
+        {% if current_user.is_authenticated and current_user.is_admin %}
+        <form action="{{ url_for('delete_contribution', contrib_id=c.id) }}" method="POST"
+              onsubmit="return confirm('¿Seguro que quieres eliminar este aporte?');">
+            <button type="submit" class="text-red-400 hover:text-red-600 ml-4">🗑️ Eliminar</button>
         </form>
         {% endif %}
     </div>

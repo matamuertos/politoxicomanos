@@ -399,6 +399,15 @@ def delete_comment(comment_id):
     flash('Comentario eliminado.', 'success')
     return redirect(url_for('view_contribution', contrib_id=contrib_id))
 
+@app.route('/admin/delete_contribution/<int:contrib_id>', methods=['POST'])
+@admin_required
+def delete_contribution(contrib_id):
+    contrib = Contribution.query.get_or_404(contrib_id)
+    db.session.delete(contrib)
+    db.session.commit()
+    flash('Aporte eliminado correctamente.', 'success')
+    return redirect(url_for('home'))
+
 @app.route('/admin/mute/<int:user_id>')
 @admin_required
 def mute_user(user_id):
