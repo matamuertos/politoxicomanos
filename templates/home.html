@@ -10,10 +10,10 @@
             <img src="{{ url_for('uploaded_file', filename='profile_pics/' + (c.author.profile_pic or 'default.png')) }}"
                  alt="Avatar" class="w-10 h-10 rounded-full border border-zinc-700">
             <div>
-                <a href="{{ url_for('view_contribution', contrib_id=c.id) }}"
-                   class="text-blue-400 hover:text-blue-300 text-xl font-semibold no-underline visited:text-blue-400 block">
-                   {{ c.title }}
-                </a>
+                <h2 class="contribution-title">
+                <a href="{{ url_for('view_contribution', contrib_id=c.id) }}">{{ c.title }}</a>
+                </h2>
+
                 <small class="text-gray-400">Por
                     <a href="{{ url_for('profile', username=c.author.username) }}" class="underline hover:text-blue-300">
                         {{ c.author.username }}

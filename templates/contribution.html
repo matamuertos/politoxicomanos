@@ -20,17 +20,13 @@
             <iframe src="{{ contribution.link|embed_video }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         {% endif %}
     </div>
-    <div style="display:flex; align-items:center; margin-bottom:10px;">
-        <span style="margin-right:10px;">Votos: {{ contribution.votes }}</span>
-        {% if current_user and current_user.id != contribution.author.id and contribution.approved %}
-        <form action="{{ url_for('vote_contribution', contrib_id=contribution.id, value=1) }}" method="POST" style="display:inline; margin-right:5px;">
-            <button type="submit">👍</button>
-        </form>
-        <form action="{{ url_for('vote_contribution', contrib_id=contribution.id, value=-1) }}" method="POST" style="display:inline;">
-            <button type="submit">👎</button>
-        </form>
-        {% endif %}
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; border: 1px solid #3f3f46;">
+    <iframe src="{{ c.link|embed_video }}"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 12px;"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
     </div>
+
     <hr>
     <div class="comments-section">
         <h3>Comentarios ({{ comments|length }})</h3>
