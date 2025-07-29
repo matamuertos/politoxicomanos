@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-    max-width: 960px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -141,7 +141,7 @@ form button:hover {
 
 /* Título más grande y claro */
 .contribution-title a {
-    color: #3b82f6;
+    color: #ffffff;
     text-decoration: none;
     font-size: 24px;  /* Aumentado */
     font-weight: bold;
@@ -149,20 +149,33 @@ form button:hover {
 }
 
 .contribution-title a:hover {
-    color: #60a5fa;
+    color: #ffffff;
 }
 
 .contribution-title a:visited {
-    color: #3b82f6;
+    color: #ffffff;
 }
 
 /* Descripción más clara */
 .contribution-description {
     font-size: 16px;
     line-height: 1.5;
-    color: #ccc;
+    color: #ffffff;
     margin: 10px 0 20px;
 }
+
+/* Video o imagen ocupa todo el ancho de la tarjeta */
+.contribution-media iframe,
+.contribution-media img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    display: block;
+    border-radius: 8px;
+    border: 1px solid #444;
+    margin: 0 auto;
+}
+
 
 /* Comments */
 .comments-section {
